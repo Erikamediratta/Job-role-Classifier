@@ -4,7 +4,7 @@
 NLP-based machine learning app that classifies resumes into 24 job categories.
 
 ## Live Demo
-[Add deployment link here]
+ https://job-role-classifier-1-wi9e.onrender.com
 
 ## Tech Stack
 - Python, Pandas, NLTK
