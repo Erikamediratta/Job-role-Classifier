@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Job Role Classifier</title>
+    <style>
+        * { margin: 0; 
+        padding: 0; 
+        box-sizing: border-box;
+         }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh; 
+            /* takes full screen height  */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+             border-radius: 16px;  /* rounded-corners */
+            width: 100%;
+            max-width: 550px;
+        }
+        /* white card in the middle of the grey board */
+
+
+        h1 {
+            text-align: center;
+            color: #1a1a2e;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .upload-area {
+            border: 2px dashed #4361ee;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .upload-area:hover { background: #f0f4ff; }
+        /* changes background when you hover over it  */
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .upload-area label {
+            cursor: pointer;
+            color: #4361ee;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .upload-area p {
+            color: #999;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover { background: #3451d1; }
+        /* gets darker when hovered */
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .result.success {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+        }
+
+        .result h2 {
+            color: #2e7d32;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .result .category {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 10px 0;
+        }
+
+        .result .confidence {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .filename {
+            text-align: center;
+            color: #4361ee;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Resume Job Classifier</h1>
+        <p class="subtitle">Upload your resume and find out which job role suits you best</p>
+
+        <form action="/predict" method="POST" enctype="multipart/form-data">
+            <!-- action="/predict" → when submitted, send data to Flask /predict route
+method="POST" → sends data securely in background
+enctype="multipart/form-data" → required whenever form has a file upload -->
+            <div class="upload-area">
+                <input type="file" name="resume" id="resume" accept=".pdf" required>
+                <label for="resume"> Click to upload your resume</label>
+                <p>PDF files only</p>
+            </div>
+            <p class="filename" id="filename"></p>
+            <button type="submit">Analyze Resume</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result success">
+            <h2>Best Job Role Match</h2>
+            <div class="category">{{ prediction }}</div>
+            <div class="confidence">Confidence: {{ probability }}%</div>
+        </div>
+        {% endif %}
+       <!-- {% if prediction %} → only show this box if Flask sent back a result
+{{ prediction }} → displays "INFORMATION-TECHNOLOGY" or "FINANCE" etc.
+{{ probability }} → displays "84.2" etc.
+{% endif %} → end of the if block
+First visit → no prediction → box hidden
+After upload → prediction exists → box shows  -->
+    </div>
+
+
+</body>
+</html>
